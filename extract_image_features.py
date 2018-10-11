@@ -13,20 +13,19 @@ import numpy as np
 base_model = VGG19(weights='imagenet')
 model = Model(inputs=base_model.input, outputs=base_model.get_layer('fc2').output)
 
-print(model.summary())
+print(model.summary(), "\n\n\n------------------Starting extraction------------------", "\n\n\n")
 
 def ExtractImageFeature(img_path):
 	img = image.load_img(img_path, target_size=(224, 224))
 	x = image.img_to_array(img)
 	x = np.expand_dims(x, axis=0)
 	x = preprocess_input(x)
-	output = model.predict(x)
-	print(output.shape)
+	output = model.predict(x)	
 	return output
 
 def SaveDict(data):
 	import pickle	
-	with open('data.pkl', 'wb') as f:	    
+	with open('image_feature_dictionary.pkl', 'wb') as f:	    
 		print("saving...")
 		pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 		print("saved!")
@@ -34,7 +33,7 @@ def SaveDict(data):
 if __name__ == "__main__":
 
 	# Where we will search for images
-	path_to_images = sys.argv[1]
+	path_to_images = "In-shop Clothes Retrieval Benchmark/" #sys.argv[1]
 
 	# Dictionary to store results
 	result = {}
@@ -63,5 +62,8 @@ if __name__ == "__main__":
 
 			if idx % 50 == 0:
 				SaveDict(result)
+
+	# Save final dictionary
+	SaveDict(result)
 
 	print("Script done!")
