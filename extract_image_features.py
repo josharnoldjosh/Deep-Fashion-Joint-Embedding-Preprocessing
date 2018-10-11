@@ -1,21 +1,28 @@
-from keras.preprocessing import image
-from keras.applications.vgg16 import VGG16
-from keras.applications.vgg16 import preprocess_input
 import glob
-import numpy as np
-from PIL import Image
 import sys
-import deepdish as dd
+import numpy as np
 
-# Function to extract image features
-model = VGG16(weights='imagenet', include_top=False)
+from PIL import Image
+
+from keras.applications.vgg19 import VGG19
+from keras.preprocessing import image
+from keras.applications.vgg19 import preprocess_input
+from keras.models import Model
+import numpy as np
+
+base_model = VGG19(weights='imagenet')
+model = Model(inputs=base_model.input, outputs=base_model.get_layer('fc2').output)
+
+print(model.summary())
+
 def ExtractImageFeature(img_path):
 	img = image.load_img(img_path, target_size=(224, 224))
-	img_data = image.img_to_array(img)
-	img_data = np.expand_dims(img_data, axis=0)
-	img_data = preprocess_input(img_data)
-	vgg16_feature = model.predict(img_data)
-	return np.array(vgg16_feature).flatten()
+	x = image.img_to_array(img)
+	x = np.expand_dims(x, axis=0)
+	x = preprocess_input(x)
+	output = model.predict(x)
+	print(output.shape)
+	return output
 
 def SaveDict(data):
 	import pickle	
@@ -54,7 +61,7 @@ if __name__ == "__main__":
 			print(image_id)		
 			result[image_id] = vectors	
 
-			if idx % 100 == 0:
+			if idx % 50 == 0:
 				SaveDict(result)
 
 	print("Script done!")
