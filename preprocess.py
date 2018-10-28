@@ -1,6 +1,7 @@
 import json
 import pickle
 import numpy as np
+import clean
 
 class Data:
 	def __init__(self):
@@ -75,9 +76,9 @@ test_size = 1600 # = 0.2 * 8000 ~ 20% of data
 for idx, caption in data:
 	if caption.strip() != "":
 		if data.counter+1 > test_size:
-			output.addTrain(caption.replace("\n", ""), image_vecs[idx])
+			output.addTrain(clean.caption(caption), image_vecs[idx])
 		else:
-			output.addTest(caption.replace("\n", ""), image_vecs[idx])
+			output.addTest(clean.caption(caption), image_vecs[idx])
 
 # Save our output
 output.saveOutput()
