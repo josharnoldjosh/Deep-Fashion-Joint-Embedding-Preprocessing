@@ -21,48 +21,33 @@ class Data:
 
 class Output:
 	def __init__(self):
-		self.train = ([], [])
-		self.test = ([], [])
+		self.data = ([], [])
 		self.sanity()
 
-	def addTest(self, caption, vecs):
+	def add(self, caption, vecs):
 		for idx, vec in enumerate(vecs):
 			if len(vec) > 0:
-				self.test[0].append(caption)
-				self.test[1].append(vec[0]) 
-		self.sanity()
-
-	def addTrain(self, caption, vecs):
-		for idx, vec in enumerate(vecs):
-			if len(vec) > 0:
-				self.train[0].append(caption)
-				self.train[1].append(vec[0])
+				self.data[0].append(caption)
+				self.data[1].append(vec[0]) 
 		self.sanity()
 
 	def sanity(self):
-		if len(self.train[0]) != len(self.train[1]):
-			print("Train is not same length!")
-		if len(self.test[0]) != len(self.test[1]):
-			print("Test is not same length!")
+		if len(self.data[0]) != len(self.data[1]):
+			print("Data is not same length!")
 
-	def saveArray(self, data, name="train"):		
+	def save(self, name=""):		
 		# Captions		
 		captions = ""
-		for cap in data[0]:
+		for cap in self.data[0]:
 			captions += cap + "\n"					
-		open("deepfashion/deepfashion_"+name+"_caps.txt", "w").write(captions.rstrip())
+		open("deepfashion/deepfashion_caps.txt", "w").write(captions.rstrip())
 
 		# Vectors 
-		vecs = np.array(data[1])		
-		np.save('deepfashion/deepfashion_'+name+'_ims.npy', vecs)
+		vecs = np.array(self.data[1])		
+		np.save('deepfashion/deepfashion_ims.npy', vecs)
 
 		# Final sanity check
 		print("Difference (should be zero): ", (len(captions.split("\n"))-1) - len(vecs))
-		return
-
-	def saveOutput(self):
-		self.saveArray(self.train, "train")
-		self.saveArray(self.test, "dev")
 		return
 
 # Load data, output, and image features
@@ -70,21 +55,12 @@ data = Data()
 output = Output()
 image_vecs = pickle.load(open("image_feature_dictionary.pkl", "rb"))
 
-# Test - train split
-test_size = 1600 # = 0.2 * 8000 ~ 20% of data
-
 for idx, caption in data:
-	if caption.strip() != "":
-		if data.counter+1 > test_size:
-			output.addTrain(clean.caption(caption), image_vecs[idx])
-		else:
-			output.addTest(clean.caption(caption), image_vecs[idx])
+	if caption.strip() != "":		
+		output.add(clean.caption(caption), image_vecs[idx])	
 
 # Save our output
-output.saveOutput()
-
-# Output final lengths of data
-print("Test len, train len:", len(output.test[0]), len(output.train[0]))
+output.save()
 
 # Sanity check
 output.sanity()
