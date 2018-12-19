@@ -1,27 +1,14 @@
 import glob
 import sys
 import numpy as np
-
+from img_to_vec import Img2Vec
 from PIL import Image
 
-from keras.applications.vgg19 import VGG19
-from keras.preprocessing import image
-from keras.applications.vgg19 import preprocess_input
-from keras.models import Model
-import numpy as np
+img2vec = Img2Vec(cuda=True)
 
-base_model = VGG19(weights='imagenet')
-model = Model(inputs=base_model.input, outputs=base_model.get_layer('fc2').output)
-
-print(model.summary(), "\n\n\n------------------Starting extraction------------------", "\n\n\n")
-
-def ExtractImageFeature(img_path):
-	img = image.load_img(img_path, target_size=(224, 224))
-	x = image.img_to_array(img)
-	x = np.expand_dims(x, axis=0)
-	x = preprocess_input(x)
-	output = model.predict(x)	
-	return output
+def ExtractImageFeature(path):
+	img = Image.open(path)
+	return img2vec.get_vec(img)	
 
 def SaveDict(data):
 	import pickle	

@@ -12,7 +12,7 @@ Code for preprocessing the deep fashion dataset as an input to my joint embeddin
 
 1. Download the deep fashion dataset from link above.
 
-2. Drag `extract_image_features.py` so it is **next** to the deep fashion folder you downloaded.
+2. Drag `extract_image_features.py` and `img_2_vec.py` so it is **next** to the deep fashion folder you downloaded.
 
 3. Rename the deep fashion folder to `In-shop Clothes Retrieval Benchmark`. Inside of the folder should be `Anno`, `Img` folders, etc.
 
