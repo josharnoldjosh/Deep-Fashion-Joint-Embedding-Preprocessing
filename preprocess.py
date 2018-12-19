@@ -28,7 +28,7 @@ class Output:
 		for idx, vec in enumerate(vecs):
 			if len(vec) > 0:
 				self.data[0].append(caption)
-				self.data[1].append(vec[0]) 
+				self.data[1].append(vec) 
 		self.sanity()
 
 	def sanity(self):

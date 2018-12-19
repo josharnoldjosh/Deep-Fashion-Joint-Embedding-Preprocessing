@@ -18,6 +18,6 @@ Code for preprocessing the deep fashion dataset as an input to my joint embeddin
 
 4. Run `extract_image_features.py`
 
-5. Next, drag the output `image_feature_dictionary.pkl` and `preprocess.py` into the `In-shop Clothes Retrieval Benchmark/Anno` and then run `preprocess.py`.
+5. Next, drag the output `image_feature_dictionary.pkl`, `preprocess.py` and `clean.py` into the `In-shop Clothes Retrieval Benchmark/Anno` and then run `preprocess.py`.
 
 6. You should have an output folder `deepfashion/` containing the input for the model. Just drop the `deepfashion/` into the `data/` folder.
